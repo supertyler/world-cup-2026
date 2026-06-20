@@ -1,0 +1,178 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>FIFA World Cup 2026 — Full Fixture List</title>
+<style>
+  body { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif; font-size: 13px; color: #1a1a1a; background: #fff; margin: 0; padding: 24px; }
+  h1 { font-size: 18px; font-weight: 600; margin: 0 0 4px; }
+  p.sub { font-size: 12px; color: #666; margin: 0 0 16px; }
+  .controls { display: flex; gap: 8px; flex-wrap: wrap; margin-bottom: 12px; }
+  input, select { font-size: 12px; padding: 5px 8px; border: 1px solid #ccc; border-radius: 5px; background: #fff; }
+  input { width: 180px; }
+  table { width: 100%; border-collapse: collapse; }
+  thead th { text-align: left; padding: 6px 10px; font-size: 11px; font-weight: 600; color: #555; border-bottom: 2px solid #ddd; white-space: nowrap; }
+  td { padding: 5px 10px; border-bottom: 1px solid #eee; vertical-align: middle; }
+  tr:hover td { background: #f7f7f7; }
+  .stage-pill { display: inline-block; padding: 1px 7px; border-radius: 4px; font-size: 11px; font-weight: 500; background: #f0f0f0; color: #444; white-space: nowrap; }
+  .badge { display: inline-block; padding: 2px 8px; border-radius: 4px; font-size: 11px; font-weight: 600; white-space: nowrap; }
+  .bbc { background: #dbeafe; color: #1d4ed8; }
+  .itv { background: #dcfce7; color: #166534; }
+  .tbc { background: #f3f4f6; color: #6b7280; }
+  .fixture { font-weight: 500; }
+  .result { font-size: 11px; color: #999; margin-left: 4px; }
+  .no-results { padding: 2rem; text-align: center; color: #999; }
+  col.cd { width: 88px; } col.ct { width: 52px; } col.cs { width: 80px; } col.cf { width: auto; } col.cv { width: 110px; }
+</style>
+</head>
+<body>
+<h1>FIFA World Cup 2026 — Full Fixture List</h1>
+<p class="sub">All times BST (UK Summer Time) &nbsp;·&nbsp; 104 matches &nbsp;·&nbsp; 11 Jun – 19 Jul 2026</p>
+<div class="controls">
+  <input type="text" id="search" placeholder="Search team or group…" oninput="render()">
+  <select id="stage" onchange="render()">
+    <option value="">All stages</option>
+    <option value="Group">Group stage</option>
+    <option value="Round of 32">Round of 32</option>
+    <option value="Round of 16">Round of 16</option>
+    <option value="Quarter-final">Quarter-finals</option>
+    <option value="Semi-final">Semi-finals</option>
+    <option value="3rd Place">3rd place playoff</option>
+    <option value="Final">Final</option>
+  </select>
+  <select id="tv" onchange="render()">
+    <option value="">All channels</option>
+    <option value="BBC">BBC</option>
+    <option value="ITV">ITV</option>
+    <option value="TBC">TBC</option>
+  </select>
+</div>
+<table>
+<colgroup><col class="cd"><col class="ct"><col class="cs"><col class="cf"><col class="cv"></colgroup>
+<thead><tr><th>Date</th><th>Time</th><th>Stage</th><th>Fixture</th><th>TV / Stream</th></tr></thead>
+<tbody id="tbody"></tbody>
+</table>
+<script>
+const F=[
+{d:"Thu 11 Jun",t:"20:00",f:"Mexico 2–0 South Africa",s:"Group A",tv:"BBC",r:1},
+{d:"Fri 12 Jun",t:"00:00",f:"South Korea 2–1 Czechia",s:"Group A",tv:"ITV",r:1},
+{d:"Fri 12 Jun",t:"17:00",f:"Canada 1–1 Bosnia & Herzegovina",s:"Group B",tv:"BBC",r:1},
+{d:"Fri 12 Jun",t:"20:00",f:"USA 4–1 Paraguay",s:"Group D",tv:"ITV",r:1},
+{d:"Sat 13 Jun",t:"00:00",f:"Qatar 1–1 Switzerland",s:"Group B",tv:"BBC",r:1},
+{d:"Sat 13 Jun",t:"17:00",f:"Brazil 1–1 Morocco",s:"Group C",tv:"ITV",r:1},
+{d:"Sat 13 Jun",t:"20:00",f:"Scotland 1–0 Haiti",s:"Group C",tv:"BBC",r:1},
+{d:"Sun 14 Jun",t:"00:00",f:"Australia 2–0 Turkiye",s:"Group D",tv:"ITV",r:1},
+{d:"Sun 14 Jun",t:"17:00",f:"Germany 7–1 Curaçao",s:"Group E",tv:"BBC",r:1},
+{d:"Sun 14 Jun",t:"20:00",f:"Netherlands 2–2 Japan",s:"Group F",tv:"ITV",r:1},
+{d:"Mon 15 Jun",t:"00:00",f:"Ivory Coast 1–0 Ecuador",s:"Group E",tv:"BBC",r:1},
+{d:"Mon 15 Jun",t:"04:00",f:"Sweden 5–1 Tunisia",s:"Group F",tv:"ITV",r:1},
+{d:"Mon 15 Jun",t:"17:00",f:"Spain 0–0 Cape Verde",s:"Group H",tv:"BBC",r:1},
+{d:"Mon 15 Jun",t:"20:00",f:"Belgium 1–1 Egypt",s:"Group G",tv:"ITV",r:1},
+{d:"Tue 16 Jun",t:"00:00",f:"Saudi Arabia 1–1 Uruguay",s:"Group H",tv:"BBC",r:1},
+{d:"Tue 16 Jun",t:"04:00",f:"Iran 2–2 New Zealand",s:"Group G",tv:"ITV",r:1},
+{d:"Tue 16 Jun",t:"17:00",f:"France 3–1 Senegal",s:"Group I",tv:"BBC",r:1},
+{d:"Tue 16 Jun",t:"20:00",f:"Iraq 1–4 Norway",s:"Group I",tv:"ITV",r:1},
+{d:"Wed 17 Jun",t:"00:00",f:"Argentina 3–0 Algeria",s:"Group J",tv:"BBC",r:1},
+{d:"Wed 17 Jun",t:"17:00",f:"Austria 3–1 Jordan",s:"Group J",tv:"ITV",r:1},
+{d:"Wed 17 Jun",t:"20:00",f:"Portugal 1–1 DR Congo",s:"Group K",tv:"BBC",r:1},
+{d:"Wed 17 Jun",t:"21:00",f:"England 4–2 Croatia",s:"Group L",tv:"ITV",r:1},
+{d:"Thu 18 Jun",t:"00:00",f:"Ghana 1–0 Panama",s:"Group L",tv:"BBC",r:1},
+{d:"Thu 18 Jun",t:"04:00",f:"Uzbekistan 1–3 Colombia",s:"Group K",tv:"ITV",r:1},
+{d:"Thu 18 Jun",t:"17:00",f:"South Africa 1–1 Czechia",s:"Group A",tv:"BBC",r:1},
+{d:"Thu 18 Jun",t:"20:00",f:"Bosnia & Herz. 1–4 Switzerland",s:"Group B",tv:"ITV",r:1},
+{d:"Fri 19 Jun",t:"00:00",f:"Canada 6–0 Qatar",s:"Group B",tv:"BBC",r:1},
+{d:"Fri 19 Jun",t:"17:00",f:"Mexico 1–0 South Korea",s:"Group A",tv:"ITV",r:1},
+{d:"Fri 19 Jun",t:"20:00",f:"USA 2–0 Australia",s:"Group D",tv:"BBC",r:1},
+{d:"Fri 19 Jun",t:"23:00",f:"Scotland 0–1 Morocco",s:"Group C",tv:"ITV",r:1},
+{d:"Sat 20 Jun",t:"03:00",f:"Brazil 3–0 Haiti",s:"Group C",tv:"BBC",r:1},
+{d:"Sat 20 Jun",t:"17:00",f:"Paraguay 1–0 Turkiye",s:"Group D",tv:"ITV",r:1},
+{d:"Sat 20 Jun",t:"18:00",f:"Netherlands vs Sweden",s:"Group F",tv:"BBC"},
+{d:"Sat 20 Jun",t:"21:00",f:"Germany vs Ivory Coast",s:"Group E",tv:"ITV"},
+{d:"Sun 21 Jun",t:"01:00",f:"Ecuador vs Curaçao",s:"Group E",tv:"BBC"},
+{d:"Sun 21 Jun",t:"05:00",f:"Japan vs Tunisia",s:"Group F",tv:"BBC"},
+{d:"Sun 21 Jun",t:"17:00",f:"Spain vs Saudi Arabia",s:"Group H",tv:"BBC"},
+{d:"Sun 21 Jun",t:"20:00",f:"Belgium vs Iran",s:"Group G",tv:"ITV"},
+{d:"Sun 21 Jun",t:"23:00",f:"Cape Verde vs Uruguay",s:"Group H",tv:"BBC"},
+{d:"Mon 22 Jun",t:"02:00",f:"New Zealand vs Egypt",s:"Group G",tv:"ITV"},
+{d:"Mon 22 Jun",t:"18:00",f:"Argentina vs Austria",s:"Group J",tv:"BBC"},
+{d:"Mon 22 Jun",t:"22:00",f:"France vs Iraq",s:"Group I",tv:"BBC"},
+{d:"Tue 23 Jun",t:"01:00",f:"Norway vs Senegal",s:"Group I",tv:"ITV"},
+{d:"Tue 23 Jun",t:"04:00",f:"Jordan vs Algeria",s:"Group J",tv:"ITV"},
+{d:"Tue 23 Jun",t:"18:00",f:"Portugal vs Uzbekistan",s:"Group K",tv:"ITV"},
+{d:"Tue 23 Jun",t:"21:00",f:"England vs Ghana",s:"Group L",tv:"BBC"},
+{d:"Wed 24 Jun",t:"00:00",f:"Croatia vs Panama",s:"Group L",tv:"BBC"},
+{d:"Wed 24 Jun",t:"03:00",f:"Colombia vs DR Congo",s:"Group K",tv:"ITV"},
+{d:"Wed 24 Jun",t:"20:00",f:"Canada vs Switzerland / Bosnia vs Qatar",s:"Group B",tv:"ITV"},
+{d:"Wed 24 Jun",t:"23:00",f:"Scotland vs Brazil / Morocco vs Haiti",s:"Group C",tv:"BBC"},
+{d:"Thu 25 Jun",t:"02:00",f:"Mexico vs Czechia / S. Africa vs S. Korea",s:"Group A",tv:"BBC"},
+{d:"Thu 25 Jun",t:"21:00",f:"Germany vs Ecuador / Curaçao vs Ivory Coast",s:"Group E",tv:"BBC"},
+{d:"Fri 26 Jun",t:"00:00",f:"Japan vs Sweden / Netherlands vs Tunisia",s:"Group F",tv:"BBC"},
+{d:"Fri 26 Jun",t:"03:00",f:"USA vs Turkiye / Paraguay vs Australia",s:"Group D",tv:"ITV"},
+{d:"Fri 26 Jun",t:"20:00",f:"France vs Norway / Senegal vs Iraq",s:"Group I",tv:"ITV"},
+{d:"Sat 27 Jun",t:"01:00",f:"Cape Verde vs Saudi Arabia / Uruguay vs Spain",s:"Group H",tv:"ITV"},
+{d:"Sat 27 Jun",t:"04:00",f:"Egypt vs Iran / New Zealand vs Belgium",s:"Group G",tv:"BBC"},
+{d:"Sat 27 Jun",t:"22:00",f:"England vs Panama / Croatia vs Ghana",s:"Group L",tv:"ITV"},
+{d:"Sun 28 Jun",t:"00:30",f:"Colombia vs Portugal / DR Congo vs Uzbekistan",s:"Group K",tv:"BBC"},
+{d:"Sun 28 Jun",t:"03:00",f:"Algeria vs Austria / Argentina vs Jordan",s:"Group J",tv:"BBC"},
+{d:"Sun 28 Jun",t:"20:00",f:"Group A RU vs Group B RU",s:"Round of 32",tv:"TBC"},
+{d:"Mon 29 Jun",t:"18:00",f:"Group C W vs Group F RU",s:"Round of 32",tv:"TBC"},
+{d:"Mon 29 Jun",t:"21:30",f:"Group E W vs best 3rd",s:"Round of 32",tv:"TBC"},
+{d:"Tue 30 Jun",t:"02:00",f:"Group F W vs Group C RU",s:"Round of 32",tv:"TBC"},
+{d:"Tue 30 Jun",t:"18:00",f:"Group E RU vs Group I RU",s:"Round of 32",tv:"TBC"},
+{d:"Tue 30 Jun",t:"22:00",f:"Group I W vs best 3rd",s:"Round of 32",tv:"TBC"},
+{d:"Wed 1 Jul",t:"02:00",f:"Group A W vs best 3rd",s:"Round of 32",tv:"TBC"},
+{d:"Wed 1 Jul",t:"17:00",f:"Group L W vs best 3rd",s:"Round of 32",tv:"TBC"},
+{d:"Wed 1 Jul",t:"21:00",f:"Group G W vs best 3rd",s:"Round of 32",tv:"TBC"},
+{d:"Thu 2 Jul",t:"01:00",f:"Group D W vs best 3rd",s:"Round of 32",tv:"TBC"},
+{d:"Thu 2 Jul",t:"20:00",f:"Group H W vs Group J RU",s:"Round of 32",tv:"TBC"},
+{d:"Fri 3 Jul",t:"00:00",f:"Group K RU vs Group L RU",s:"Round of 32",tv:"TBC"},
+{d:"Fri 3 Jul",t:"04:00",f:"Group B W vs best 3rd",s:"Round of 32",tv:"TBC"},
+{d:"Fri 3 Jul",t:"19:00",f:"Group D RU vs Group G RU",s:"Round of 32",tv:"TBC"},
+{d:"Fri 3 Jul",t:"23:00",f:"Group J W vs Group H RU",s:"Round of 32",tv:"TBC"},
+{d:"Sat 4 Jul",t:"02:30",f:"Group K W vs best 3rd",s:"Round of 32",tv:"TBC"},
+{d:"Sat 4 Jul",t:"18:00",f:"R16 match 1",s:"Round of 16",tv:"TBC"},
+{d:"Sat 4 Jul",t:"22:00",f:"R16 match 2",s:"Round of 16",tv:"TBC"},
+{d:"Sun 5 Jul",t:"21:00",f:"R16 match 3",s:"Round of 16",tv:"TBC"},
+{d:"Mon 6 Jul",t:"01:00",f:"R16 match 4",s:"Round of 16",tv:"TBC"},
+{d:"Mon 6 Jul",t:"20:00",f:"R16 match 5",s:"Round of 16",tv:"TBC"},
+{d:"Tue 7 Jul",t:"01:00",f:"R16 match 6",s:"Round of 16",tv:"TBC"},
+{d:"Tue 7 Jul",t:"17:00",f:"R16 match 7",s:"Round of 16",tv:"TBC"},
+{d:"Tue 7 Jul",t:"21:00",f:"R16 match 8",s:"Round of 16",tv:"TBC"},
+{d:"Thu 9 Jul",t:"21:00",f:"Quarter-final 1",s:"Quarter-final",tv:"TBC"},
+{d:"Fri 10 Jul",t:"20:00",f:"Quarter-final 2",s:"Quarter-final",tv:"TBC"},
+{d:"Sat 11 Jul",t:"22:00",f:"Quarter-final 3",s:"Quarter-final",tv:"TBC"},
+{d:"Sun 12 Jul",t:"02:00",f:"Quarter-final 4",s:"Quarter-final",tv:"TBC"},
+{d:"Mon 14 Jul",t:"20:00",f:"Semi-final 1",s:"Semi-final",tv:"TBC"},
+{d:"Tue 15 Jul",t:"20:00",f:"Semi-final 2",s:"Semi-final",tv:"TBC"},
+{d:"Fri 18 Jul",t:"22:00",f:"3rd place playoff",s:"3rd Place",tv:"TBC"},
+{d:"Sat 19 Jul",t:"20:00",f:"Final",s:"Final",tv:"TBC"},
+];
+function tvBadge(tv){
+  if(tv==="BBC") return'<span class="badge bbc">BBC / iPlayer</span>';
+  if(tv==="ITV") return'<span class="badge itv">ITV / ITVX</span>';
+  return'<span class="badge tbc">TBC</span>';
+}
+function render(){
+  const q=document.getElementById("search").value.toLowerCase();
+  const stage=document.getElementById("stage").value;
+  const tv=document.getElementById("tv").value;
+  const rows=F.filter(x=>{
+    if(q&&!x.f.toLowerCase().includes(q)&&!x.s.toLowerCase().includes(q)) return false;
+    if(stage&&!x.s.includes(stage)) return false;
+    if(tv&&x.tv!==tv) return false;
+    return true;
+  });
+  const tb=document.getElementById("tbody");
+  if(!rows.length){tb.innerHTML='<tr><td colspan="5" class="no-results">No fixtures match.</td></tr>';return;}
+  tb.innerHTML=rows.map(x=>`<tr>
+    <td>${x.d}</td><td>${x.t}</td>
+    <td><span class="stage-pill">${x.s}</span></td>
+    <td><span class="fixture">${x.f}</span>${x.r?'<span class="result">result</span>':''}</td>
+    <td>${tvBadge(x.tv)}</td>
+  </tr>`).join("");
+}
+render();
+</script>
+</body>
+</html>
